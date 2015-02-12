@@ -1,0 +1,15 @@
+<?php if( $this->getConfig('enabled') && ($this->getConfig('leftmenu')) ): ?>
+	<div class="block-verticalmenu hidden-xs hidden-sm clearfix">
+		<?php if( $this->getConfig('title') ): ?>
+			<div class="verticalmenu-title"><h2><?php echo $this->getConfig('title') ?></h2></div>
+		<?php endif; ?>
+		<div class="verticalmenu-content">
+			<?php $_menu = $this->renderCategoriesMenuHtml(0,'level-top') ?>
+			<?php if($_menu): ?>
+				<ul id="ma-<?php echo $this->getConfig('leftmenu') ?>" class="<?php echo $this->getConfig('leftmenu') ?>">
+					<?php echo $_menu ?>
+				</ul>
+			<?php endif ?>
+		</div>
+	</div>
+<?php endif; ?>

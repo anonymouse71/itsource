@@ -1,0 +1,271 @@
+<?php
+$title = $this->getTitle();
+$identify = $this->getIdentify();
+$categoryIds = $this->getCatIds();
+$categoryIds = explode(',', $categoryIds);
+$_helper = $this->helper('catalog/output');
+$productsOnRow = $this->getProductsOnRow();
+if(!$productsOnRow) $productsOnRow = 3;
+if ( !$this->getWidthThumbnail() ){
+	$w_thumbnail = 135;
+} else {
+	$w_thumbnail = $this->getWidthThumbnail();
+}
+if( !$this->getHeightThumbnail() ){
+	$h_thumbnail = 135;
+ }
+else {
+	$h_thumbnail = $this->getHeightThumbnail();
+}
+?>
+
+<?php
+	// Slier imges product
+       $auto = Mage::getStoreConfig('imgslider/imgslider_config/auto');
+       $speed = Mage::getStoreConfig('imgslider/imgslider_config/speed');
+       $width = Mage::getStoreConfig('imgslider/imgslider_config/width_images');
+       $height = Mage::getStoreConfig('imgslider/imgslider_config/height_images');
+?>
+
+<?php
+
+        $item_width = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/item_width');
+        $items_show = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/items_show');
+        $speed = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/speed');
+        $interval = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/interval');
+        $nav_ctrl = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/nav_ctrl');
+        $next_back = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/next_back');
+        $show_price = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/show_price');
+        $review = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/show_review');
+	$addtowishlist = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/addtowishlist');
+	$addtocompare = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/addtocompare');
+	
+	$title = $this->getTitle();
+	$widthImage  = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/width_thumbnail');
+	$heightImage = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/height_thumbnail');
+	$categoryWidth = Mage::getStoreConfig('categorytabsliders/categorytabsliders_config/category_width');
+?>
+<div id="container">
+<?php 	echo '<div class="categoryslider-title"><h2>'.$title.'</h2></div>'; ?>
+<div class="title-border"></div>
+  <ul class="tabs tabs<?php echo '-'.$identify;?>  tab_categorys"> 
+   <?php 
+	$k = 0;
+	$total = count($categoryIds);
+	foreach($categoryIds as $cate_id) {
+		$cate_model = Mage::getModel('catalog/category')->load($cate_id);
+		$cateName = $cate_model->getName();
+		
+		if($cateName) {
+   ?>
+			<li style="width: <?php echo ($categoryWidth) ? $categoryWidth .'px': '134px' ?>" class="item <?php if($k==0){ echo "active first"; } else if($k==$total-1) echo 'last';?>" rel="tab<?php echo $cate_id.'-'.$identify;?>">
+			<div class="item-container">
+				<div class="name-container">
+					<?php  echo $cateName; ?><span class="fa fa-sort-desc"></span>
+				</div>
+				<div class="images-container">
+					<img class="image" src="<?php echo $this->getCatResizedSlider($cate_model, $widthImage, $heightImage, 100); ?>" alt="<?php echo $cate_model->getName(); ?>" />
+				</div>
+				
+			</div>
+				
+			</li>
+	<?php }  $k++; } ?>
+    </ul>
+
+	<div class="tab_container"> 
+		<?php foreach($categoryIds as $cate_id) {
+		?>
+		 <div id="tab<?php echo $cate_id.'-'.$identify;?>" class="tab_content_<?php echo $identify; ?>"> 
+			<?php $_productCollection = $this->getProductCate($cate_id); ?>
+			<?php $_collectionSize = $_productCollection->count() ?>
+			<?php $_columnCount = $productsOnRow; ?>
+		<ul class="bxslider">	
+		<?php $i=0; foreach ($_productCollection as $_product): ?>
+		
+				<li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?> ma-item_slider" style ="width:<?php echo $item_width; ?>px !important">
+					<div class="item-inner">
+						<div class="ma-box-content">
+							<?php
+							$newFromDate = Mage::getModel('catalog/product')->load($_product->getID())->getNewsFromDate();
+							$newToDate = Mage::getModel('catalog/product')->load($_product->getID())->getNewsToDate();                 
+							$now = date("Y-m-d H:m:S");
+							// Get the Special Price
+							$specialprice = Mage::getModel('catalog/product')->load($_product->getId())->getSpecialPrice(); 
+							// Get the Special Price FROM date
+							$specialPriceFromDate = Mage::getModel('catalog/product')->load($_product->getId())->getSpecialFromDate();
+							// Get the Special Price TO date
+							$specialPriceToDate = Mage::getModel('catalog/product')->load($_product->getId())->getSpecialToDate();
+							// Get Current date
+							if ($specialprice&&($specialPriceFromDate <= $now && $specialPriceToDate >= $now)&& Mage::getStoreConfig('themeoptions/themeoptions_config/sale_label')){
+							 echo '<div class="label-pro-sale">sale</div>';
+							}else{
+							 if($newFromDate <= $now && $newToDate >= $now && Mage::getStoreConfig('themeoptions/themeoptions_config/new_label') ) {
+								   echo '<div class="label-pro-new">new</div>';
+							 }
+							}
+							?>
+							<ul class="add-to-links">
+								<?php if($addtowishlist) { ?>
+								<?php if ($this->helper('wishlist')->isAllow()) : ?>
+									<li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist" title="<?php echo $this->__('Wishlist') ?>"><i class="fa fa-heart"></i></a></li>
+								<?php endif; ?>
+								<?php } ?>
+								<?php if($addtocompare) { ?>
+								<?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+									<li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare" title="<?php echo $this->__('Compare') ?>"><i class="fa fa-refresh"></i></a></li>
+								<?php endif; ?>
+								<?php } ?>
+							</ul>
+							<?php
+								$width_images = Mage::getStoreConfig('imgslider/imgslider_config/width_images');
+								$height_images = Mage::getStoreConfig('imgslider/imgslider_config/height_images');
+							     ?>
+							 <ul class="ma-imageslider">
+								 <?php $index =0;?>
+								 <li class="ma-item-image first" data-index="<?php echo $index ?>"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($w_thumbnail,$h_thumbnail); ?>" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a></li>
+					     
+								 <?php $GalleryImages = Mage::getModel('catalog/product')->load($_product->getId())->getMediaGalleryImages();?>
+								 <?php if($GalleryImages): ?>
+								    <?php foreach($GalleryImages as $_image): ?>
+								     <li class="ma-item-image" data-index="<?php $index++; echo $index ?>"><a href="<?php echo $_product->getProductUrl() ?>" class="product-image"><img src="<?=$this->helper('catalog/image')->init($_product, 'gallery', $_image->getFile())->resize($w_thumbnail, $h_thumbnail); ?>" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'gallery'), null, true) ?>" title="<?=$this->htmlEscape($_image->getLabel());?>" /></a></li>
+								    <?php endforeach ?>
+								 <?php endif?>
+							 </ul>
+					     
+							     
+					     
+							 <ul class="ma-imageslider-pager">
+								 <?php $index =0;?>
+								 <li class="ma-item-thumbnail" data-index="<?php echo $index ?>"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($width_images,$height_images ); ?>" width="<?php echo $width_images?>" height="<?php echo $height_images?>" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></li>
+					     
+								 <?php $GalleryImages = Mage::getModel('catalog/product')->load($_product->getId())->getMediaGalleryImages();?>
+								 <?php if($GalleryImages): ?>
+								    <?php foreach($GalleryImages as $_image): ?>
+								     <li class="ma-item-thumbnail" data-index="<?php $index++; echo $index ?>"><img src="<?=$this->helper('catalog/image')->init($_product, 'gallery', $_image->getFile())->resize($width_images,$height_images); ?>" width="<?php echo $width_images?>" height="<?php echo $height_images?>" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'gallery'), null, true) ?>" title="<?=$this->htmlEscape($_image->getLabel());?>" /></li>
+								    <?php endforeach ?>
+								 <?php endif?>
+							 </ul>
+							<h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a></h2>
+							<?php if($review) { ?>
+							<?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
+							<?php } ?>
+							<?php echo $this->getPriceHtml($_product, true) ?>
+							<div class="actions">
+								<?php if($_product->isSaleable()): ?>
+									<button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><i class="fa fa-arrow-circle-down"></i><?php echo $this->__('Add to Cart') ?></span></span></button>
+								<?php else: ?>
+									<p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+								<?php endif; ?>
+								
+							</div>
+						</div>
+					</div>
+				</li>
+			<?php endforeach ?>
+			</ul>		
+			<script type="text/javascript">
+						$jq(document).ready(function(){
+							<?php $idBx = '#tab'.$cate_id.'-'.$identify.' .bxslider'; ?>
+						  $jq("<?php echo $idBx; ?>").bxSlider(
+							{
+							  speed: <?php echo $speed; ?>,
+							  pause: <?php echo $interval; ?>,			  
+							  minSlides: 1,
+							  moveSlides: 1,
+							  maxSlides: <?php echo $items_show ?>,
+							  slideWidth: <?php echo $item_width ?>,
+							  slideMargin: 30,
+							<?php if ($nav_ctrl) { ?>
+							  pager: true,
+							<?php } else { ?> 
+							  pager:false, 
+							<?php } ?>
+							<?php if ($next_back) { ?>
+								controls: true,
+							<?php } else { ?>
+								controls:false,
+							<?php } ?>
+							}
+						  );
+						});
+					</script>
+		 </div><!-- #tab1 -->
+		 <?php }?>
+
+		 
+	 </div> <!-- .tab_container --> 
+
+</div> <!-- #container -->
+
+<script type="text/javascript">
+
+$jq(document).ready(function() {
+	
+	$jq(".tab_content_<?php echo $identify; ?>").hide();
+	$jq(".tab_content_<?php echo $identify; ?>:first").show(); 
+
+	$jq("ul.tabs<?php echo '-'.$identify;?> li").click(function() {
+		$jq("ul.tabs<?php echo '-'.$identify;?> li").removeClass("active");
+		$jq(this).addClass("active");
+		$jq(".tab_content_<?php echo $identify; ?>").hide();
+		var activeTab = $jq(this).attr("rel"); 
+		$jq("#"+activeTab).fadeIn(); 
+	});
+});
+
+</script>
+
+<script type="text/javascript">
+        //<![CDATA[
+            jQuery(document).ready(function($){
+
+                (function(selector){
+                    $content = $(selector);
+                    $slider = $('.ma-item_slider', $content);
+
+                    $slider.each( function() {
+                        var $images = $('.ma-imageslider', $(this));
+                        var $thumbnail = $('.ma-imageslider-pager', $(this));
+                        $thumbnail.bxSlider({
+                            <?php 
+                                $v = Mage::getStoreConfig('imgslider/imgslider_config/vertical');
+                                if($v) echo " mode: 'vertical',";
+                            ?>
+                            moveSlides:1,
+                            slideWidth: 300,
+                            slideMargin: 13,
+                            minSlides: 1,
+                            maxSlides: 5,
+                            pager: false,
+                            speed: 500,
+                            pause: 3000,
+                            onSliderLoad: function(){ // call while run slider
+                                var $items_image = $('.ma-item-image',$images);
+                                var $items_thumb = $('.ma-item-thumbnail',$thumbnail);
+                                $items_thumb.click(function() {
+                                    //var type_tag = $(this).get(0).tagName;
+                                    //alert(type_tag);
+                                    var index = $(this).attr('data-index');
+                                    $items_image.each(function() {
+                                        var idx = $(this).attr('data-index');
+                                        if(idx == index) $(this).show();
+                                        else $(this).hide();
+                                    });
+                                });
+                            }
+
+                        });
+                    });
+
+                })(".tab_container");
+            }); 
+        //]]>   
+        </script>
+<style type="text/css">
+@-moz-document url-prefix() {
+	.tab_slider_container .item {
+		width:<?php echo $item_width; ?>px !important;
+	}
+}
+</style>

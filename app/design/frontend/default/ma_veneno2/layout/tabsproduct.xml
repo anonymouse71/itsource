@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+    </default>
+    <cms_index_index>
+		<reference name="head">
+            <action method="addCss" ifconfig="tabsproduct/tabsproduct_config/enabled"><stylesheet>magentothem/css/ma.tabsproduct.css</stylesheet></action>
+			<action method="addJs" ifconfig="tabsproduct/tabsproduct_config/enabled"><script>magentothem/ma.jq.slide.js</script></action>
+        </reference>
+        <!-- <reference name="content">
+            <block type="tabsproduct/tabsproduct" name="tabsproduct" template="magentothem/tabsproduct/tabsproduct.phtml" />
+        </reference> -->
+    </cms_index_index>
+</layout> 

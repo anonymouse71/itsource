@@ -1,0 +1,211 @@
+<?php
+if($modes = $this->getConfig('enabled')) {
+    $modes = $this->getConfig('mode');
+    if($modes){    
+        $arrs = explode(",", $modes);
+    }
+?>
+<?php
+    function cut_string_tab($string,$number){
+        if(strlen($string) <= $number) {
+            return $string;
+        }
+        else {	
+            if(strpos($string," ",$number) > $number){
+                $new_space = strpos($string," ",$number);
+                $new_string = substr($string,0,$new_space)."..";
+                return $new_string;
+            }
+            $new_string = substr($string,0,$number)."..";
+            return $new_string;
+        }
+    }
+?>
+<div class="ma-tabsproduct-contain">
+    <div class="ma-tabs-title">
+        <ul class="tabs-title">
+            <?php $j=0; foreach ($arrs as $arr){ ?>
+                <?php
+                    switch($arr) {
+                        case 'latest': $label = 'Lastest';
+                            break;
+                        case 'bestseller': $label = 'BestSeller';
+                            break;
+                        case 'mostviewed': $label = 'MostViewed';
+                            break;
+                        case 'featured': $label = 'Featured';
+                            break;
+                        case 'new': $label = 'New Arrival';
+                            break;
+                        case 'onsale': $label = 'OnSale';
+                            break;
+                    }
+                ?>
+                <li class="ma-<?php echo $arr;?> <?php if($j==0) echo 'first'; $j++;?>"><a href="<?php echo '#tab-'.$arr; ?>" title="<?php echo $arr;?>"><span><?php echo $this->__($label);?></span></a></li>
+            <?php } ?>
+        </ul>
+    </div>
+    <div id="tabsproduct-content" class="ma-tabs-content">
+        <?php $jc=0; foreach ($arrs as $arr){ ?>
+            <div id="<?php echo 'tab-'.$arr; ?>">
+                <?php 
+                switch ($arr) {
+                    case 'latest':
+                        $this->getLastest();
+                        break;		
+                    case 'onsale':
+                        $this->getOnsale();
+                        break;
+                    case 'bestseller':
+                        $this->getBestSeller();
+                        break;
+                    case 'mostviewed':
+                        $this->getMostviewed();
+                        break;
+                    case 'featured':
+                        $this->getFeatured();
+                        break;
+                    case 'new':
+                        $this->getNew();
+                        break;
+                }
+                ?>
+                <?php $_productCollection=$this->getProductCollection() ?>
+                <?php if(!$_productCollection->count()): ?> <!-- start if exist product -->
+                    <p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+                <?php else: ?>
+                    <div id="<?php echo 'tab-'.$arr; ?>-content" class="tabs-category-products <?php if ( $jc == 0 ) { echo 'tabs-first'; $jc++; } ?>">
+                        <?php $_collectionSize = $_productCollection->count() ?>
+                        <?php if( !$this->getConfig('items') ) { $_columnCount = 1 ; } else { $_columnCount = $this->getConfig('items'); }?>
+                        <?php $i=0; foreach ($_productCollection as $_product): ?>
+                            <?php if ( $i++ % $_columnCount==0): ?>
+                            <ul class="products-grid row">
+                            <?php endif ?>
+                                <?php
+                                    $w=135;
+                                    $h=135;
+                                    if ( $this->getConfig('width') ){
+                                        $w = $this->getConfig('width');
+                                    }
+                                    if( $this->getConfig('height') ){
+                                        $h = $this->getConfig('height');
+                                    }
+                                ?>
+                                <li class="col-sm-3 col-md-3 col-sms-6 col-smb-12 item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+									<div class="item-inner">
+										<div class="ma-box-content">
+											<?php
+											$newFromDate = Mage::getModel('catalog/product')->load($_product->getID())->getNewsFromDate();
+											$newToDate = Mage::getModel('catalog/product')->load($_product->getID())->getNewsToDate();                 
+											$now = date("Y-m-d H:m:S");
+											// Get the Special Price
+											$specialprice = Mage::getModel('catalog/product')->load($_product->getId())->getSpecialPrice(); 
+											// Get the Special Price FROM date
+											$specialPriceFromDate = Mage::getModel('catalog/product')->load($_product->getId())->getSpecialFromDate();
+											// Get the Special Price TO date
+											$specialPriceToDate = Mage::getModel('catalog/product')->load($_product->getId())->getSpecialToDate();
+											// Get Current date
+											if ($specialprice&&($specialPriceFromDate <= $now && $specialPriceToDate >= $now)&& Mage::getStoreConfig('themeoptions/themeoptions_config/sale_label')){
+											 echo '<div class="label-pro-sale">sale</div>';
+											}else{
+											 if($newFromDate <= $now && $newToDate >= $now && Mage::getStoreConfig('themeoptions/themeoptions_config/new_label') ) {
+												   echo '<div class="label-pro-new">new</div>';
+											 }
+											}
+											?>
+											<div class="products clearfix">
+												 <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
+												  <span class="product-image">
+												   <img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(300,300); ?>" width="300" height="300" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+												  </span>
+												  <span class="product-image image-rotator">
+												   <?php 
+												   $product = Mage::getModel('catalog/product')->load($_product->getId());
+												   if ($product->getRotatorImage() && $product->getRotatorImage() !='no_selection') {
+													//$imageTooltipResize = $this->getResizedUrl($imagetTooltip,600,400);
+													$image = Mage::helper('catalog/image')->init($product, 'rotator_image')->resize(300, 300);
+												   } else {
+													$image = Mage::helper('catalog/image')->init($_product, 'small_image')->resize(300, 300);
+												   }
+												   ?>
+												   <img src="<?php echo $image ?>" width="300" height="300" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+												   </span>   
+												 </a>
+											</div>
+											<h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>"><?php echo $this->htmlEscape($_product->getName()) ?></a></h2>
+											<?php if ( $this->getConfig('review') ): ?>
+												<?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
+											<?php endif; ?>
+											<?php echo $this->getPriceHtml($_product, true) ?>
+											<div class="actions">
+												<div class="actions-inner">
+													<?php if ($this->getConfig('addtocart')) { ?>
+														<?php if($_product->isSaleable()): ?>
+															<button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart " onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i><span><?php echo $this->__('Add to Cart') ?></span></button>
+														<?php else: ?>
+															<p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+														<?php endif; ?>
+													<?php }?>
+													<?php if( $this->getConfig('addtowishlist') || $this->getConfig('addtocompare')){?>
+													
+														<ul class="add-to-links">
+															<?php if( $this->getConfig('addtowishlist')){?>
+															<?php if ($this->helper('wishlist')->isAllow()) : ?>
+																<li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" title="<?php echo $this->__('Add to Wishlist') ?>" class="link-wishlist fa fa-heart"><span><?php echo $this->__('Add to Wishlist') ?></span></a></li>
+															<?php endif; ?>
+															<?php } ?>
+															<?php if( $this->getConfig('addtocompare') ){?>
+															<?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+																<li><span class="separator">|</span><a href="<?php echo $_compareUrl ?>" title="<?php echo $this->__('Add to Compare') ?>" class="link-compare fa fa-refresh"><span><?php echo $this->__('Add to Compare') ?></span></a></li>
+															<?php endif; ?>
+															<?php }?>
+														</ul>
+													<?php }?>
+												</div>	
+											</div>
+											<?php if( $this->getConfig('description')){?>
+											<div class="ma-desc">
+												<?php if(!$this->getConfig('maxlength')){?>
+													<?php echo nl2br($this->htmlEscape($_product->getShortDescription())) ?>
+												<?php } else {?>
+													<?php echo nl2br(cut_string_tab($this->htmlEscape($_product->getShortDescription()),$this->getConfig('maxlength'))) ?>			            
+												<?php }?>			                    
+											</div>
+											<?php }?>
+										</div>
+									</div>
+                                </li>
+                            <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+                            </ul>
+                        <?php endif ?> <!--  -->
+                        <?php endforeach ?>
+                        <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>				
+                    </div>		
+                <?php endif; ?> <!-- end exist product -->
+            </div>
+        <?php } ?>
+        <script type="text/javascript">
+        //<![CDATA[
+            $jq(document).ready(function(){
+                $jq('.ma-tabs-content').children('div').hide();
+                $jq('.ma-tabs-content div:first').show();
+                $jq('.ma-tabs-title ul li:first').addClass('active');
+                $jq('.ma-tabs-title ul.tabs-title li a').click(function(){ 
+                   $jq('.ma-tabs-title ul li').removeClass('active');
+                   $jq(this).parent().addClass('active'); 
+                   var currentTab = $jq(this).attr('href'); 
+                   $jq('.ma-tabs-content').children('div').hide();
+                    <?php if ($effect == 'fade') { ?>
+                        $jq(currentTab).fadeIn("slow");
+                    <?php } elseif ($effect == 'slidedown') { ?>
+                        $jq(currentTab).slideDown("slow");
+                    <?php } ?>
+                   $jq(currentTab).show();                   
+                   return false;
+                });
+            });
+        //]]>
+        </script>
+    </div>
+</div>
+<?php } ?>

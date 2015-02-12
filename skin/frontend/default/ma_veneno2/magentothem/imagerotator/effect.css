@@ -1,0 +1,27 @@
+.products {position:relative;display:block;float:left;overflow:hidden;margin-bottom:0;width:100%}
+.item-inner:hover .products .product-image+.product-image{
+-ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=100)";
+filter: alpha(opacity=100);
+opacity: 100;	
+}
+.products :hover .overlay{filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);opacity:1}
+.products >a{display:block;float:left;width:100%;z-index:1}
+.products >a .product-image{width:100%;line-height:0}
+.products >a .product-image img{width:100%}
+.products >a .product-image+.product-image{
+position:absolute;
+top:0;
+left:0;
+   -webkit-transition:all 0.2s ease-in-out;
+-moz-transition:all 0.2s ease-in-out;
+-o-transition:all 0.2s ease-in-out;
+transition:all 0.2s ease-in-out;
+-ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=0)";
+filter: alpha(opacity=0);
+opacity: 0;   
+}
+.products >a .product-image+.product-image img{max-width:none}
+
+@media(max-width: 1199px){
+.products >a .product-image+.product-image img{max-width: 100%}	
+}

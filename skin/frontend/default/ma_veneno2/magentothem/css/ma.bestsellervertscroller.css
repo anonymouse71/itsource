@@ -1,0 +1,52 @@
+.ma-bestseller-vertscroller-wrap .jcarousel-container {
+}
+#ma-bestseller-vertscroller-right, #ma-bestseller-vertscroller-left {
+	height: 5555px !important;
+}
+
+.ma-bestseller-vertscroller-wrap  .jcarousel-container-vertical {
+    margin: 0 auto;width: 100% !important
+}
+.ma-bestseller-vertscroller-wrap  .jcarousel-clip {
+    overflow: hidden;width: 100% !important
+}
+.ma-bestseller-vertscroller-wrap  .jcarousel-item-placeholder {
+    background: #fff;
+    color: #000;
+}
+.ma-bestseller-vertscroller-wrap .block-content li.item {
+	padding: 0;
+}
+.ma-bestseller-vertscoller-content{margin: 20px 0 0}
+/**
+ *  Vertical Buttons
+ */
+.ma-bestseller-vertscroller-wrap .jcarousel-next-vertical, 
+.ma-bestseller-vertscroller-wrap  .jcarousel-prev-vertical {
+    background: transparent url(../images/arrow-updown.png) no-repeat 0 0;
+	width: 60px;
+	height: 14px;
+	position: absolute;
+	left: 35%;
+	cursor: pointer;
+    display: none !important;
+}
+.ma-bestseller-vertscroller-wrap .jcarousel-next-vertical {
+    bottom: 5px;
+	background-position: 0 100%;
+}
+
+.ma-bestseller-vertscroller-wrap  .jcarousel-next-vertical:hover,
+.ma-bestseller-vertscroller-wrap  .jcarousel-next-vertical:focus {
+    background-position: 0 -28px;
+}
+.ma-bestseller-vertscroller-wrap  .jcarousel-prev-vertical {
+    top: 5px;
+}
+.ma-bestseller-vertscroller-wrap  .jcarousel-prev-vertical:hover,
+.ma-bestseller-vertscroller-wrap  .jcarousel-prev-vertical:focus {
+    background-position: 0 -14px;
+}
+
+.ma-bestseller-vertscroller-wrap button.btn-cart span{background:none;border:none;padding: 0;color: #666666}
+.ma-bestseller-vertscroller-wrap button.btn-cart:hover span{background:none !important;color: #5ec9c5}

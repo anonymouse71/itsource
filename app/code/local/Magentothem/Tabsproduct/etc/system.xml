@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<config>
+	<tabs>
+		<magentothem translate="label" module="tabsproduct">
+			<label>Magentothem</label>
+			<sort_order>205</sort_order>
+		</magentothem>
+	</tabs>
+	<sections>
+		<tabsproduct translate="label" module="tabsproduct">
+			<label>Tabs Product</label>
+			<tab>magentothem</tab>
+			<sort_order>169</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<tabsproduct_config translate="label">
+					<label>Tabs Product Config</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enabled translate="label comment">
+							<label>Enabled</label>
+							<frontend_type>select</frontend_type>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</enabled>						
+                        <mode translate="label">
+                            <label>Mode: </label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>
+								tabsproduct/config_mode
+							</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </mode>							
+						<addtocart translate="label comment">
+							<label>Show Add To Cart: </label>
+							<frontend_type>select</frontend_type>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</addtocart>
+						<addtowishlist translate="label comment">
+							<label>Show Add To Wishlist: </label>
+							<frontend_type>select</frontend_type>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>6</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</addtowishlist>
+						<addtocompare translate="label comment">
+							<label>Show Add To Compare: </label>
+							<frontend_type>select</frontend_type>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</addtocompare>
+						<review>
+							<label>Show Review Rating: </label>
+							<frontend_type>select</frontend_type>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>9</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_store>1</show_in_store>
+							<show_in_website>1</show_in_website>
+						</review>						
+						<description translate="label comment">
+							<label>Show short description: </label>
+							<frontend_type>select</frontend_type>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>12</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</description>
+						<maxlength translate="label">
+                            <label>Short Description Max Length: </label>
+                            <frontend_type>text</frontend_type>
+							<comment>Empty for display all short description.</comment>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </maxlength> 						
+						<qty translate="label">
+                            <label>Qty Of Products: </label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>14</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </qty>
+                        <items translate="label">
+                            <label>Products per row: </label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>16</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </items>
+                        <width translate="label">
+                            <label>Width Of Thumbnail: </label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>18</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </width>						
+                        <height translate="label">
+                            <label>Height Of Thumbnail: </label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </height>                        
+					</fields>
+				</tabsproduct_config>						
+			</groups>
+		</tabsproduct>
+	</sections>
+</config>
+
+

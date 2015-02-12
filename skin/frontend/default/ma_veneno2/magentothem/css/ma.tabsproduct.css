@@ -1,0 +1,26 @@
+.ma-tabsproduct-contain {
+    clear: both;
+    width: 100%;
+    margin:50px 0 0;
+}
+.ma-tabs-title {
+    float: left;
+    width: 100%;
+    margin: 0 0 30px;
+background-color: #f4f4f4
+}
+.ma-tabs-title li {float: left}
+.ma-tabs-title a {
+float: left;
+font-size:15px;
+text-decoration: none;
+text-transform: uppercase;
+font-family: CalibriBold;
+color: #222222;
+border-right: 2px solid #fff;
+padding: 10px 30px;
+}
+.ma-tabs-title li.active a, .ma-tabs-title a:hover {background-color: #222222;color: #fff}
+.ma-tabs-content {
+    clear: both;
+}
